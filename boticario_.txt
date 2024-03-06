@@ -1,0 +1,69 @@
+CREATE DATABASE `boticario` ;
+USE `boticario`;
+ 
+Table `boticario`.`produtos`
+
+CREATE TABLE IF NOT EXISTS `boticario`.`produtos` (
+  `id_produto` INT NOT NULL AUTO_INCREMENT,
+  `produto_nome` VARCHAR(45) NOT NULL,
+  `produto_descricao` VARCHAR(45) NOT NULL,
+  `produto_preco` VARCHAR(45) NOT NULL,
+  `produto_quantidade` VARCHAR(45) NOT NULL,
+  `produto_categoria` ENUM("masculina", "feminina", "infantil", "acessorio") NOT NULL,
+  PRIMARY KEY (`id_produto`));
+ 
+Table `boticario`.`cliente`
+
+CREATE TABLE IF NOT EXISTS `boticario`.`cliente` (
+  `id_cliente` INT NOT NULL AUTO_INCREMENT,
+  `cliente_nome` VARCHAR(45) NOT NULL,
+  `cliente_numero` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_cliente`));
+ 
+
+Table `boticario`.`venda`
+
+CREATE TABLE IF NOT EXISTS `boticario`.`venda` (
+  `id_venda` INT NOT NULL AUTO_INCREMENT,
+  `venda_data` DATE NOT NULL,
+  `venda_quantidade` INT NOT NULL,
+  `produtos_id_produto` INT NOT NULL,
+  `cliente_id_cliente` INT NOT NULL,
+  PRIMARY KEY (`id_venda`, `produtos_id_produto`, `cliente_id_cliente`),
+  INDEX `fk_venda_produtos_idx` (`produtos_id_produto` ASC) ,
+  INDEX `fk_venda_cliente1_idx` (`cliente_id_cliente` ASC) ,
+  CONSTRAINT `fk_venda_produtos`
+    FOREIGN KEY (`produtos_id_produto`)
+    REFERENCES `boticario`.`produtos` (`id_produto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_venda_cliente1`
+    FOREIGN KEY (`cliente_id_cliente`)
+    REFERENCES `boticario`.`cliente` (`id_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+INSERT INTO `produtos` (`produto_nome`, `produto_descricao`, `produto_preco`, `produto_quantidade`, `produto_categoria`) 
+VALUES 
+('Camiseta', 'Camiseta preta básica', '29.99', '100', 'masculina'),
+('Vestido', 'Vestido floral midi', '49.99', '50', 'feminina'),
+('Calça Jeans', 'Calça jeans slim fit', '39.99', '80', 'masculina'),
+('Sapatilha', 'Sapatilha preta básica', '34.99', '30', 'feminina'),
+('Boné', 'Boné trucker estampado', '19.99', '60', 'acessorio');
+
+INSERT INTO `cliente` (`cliente_nome`, `cliente_numero`) 
+VALUES 
+('Maria Silva', '+55 11 98765-4321'),
+('João Santos', '+55 11 91234-5678'),
+('Ana Oliveira', '+55 11 92345-6789'),
+('Pedro Souza', '+55 11 93456-7890'),
+('Carla Costa', '+55 11 94567-8901');
+
+INSERT INTO `venda` (`venda_data`, `venda_quantidade`, `produtos_id_produto`, `cliente_id_cliente`) 
+VALUES 
+('2024-03-01', '2', '1', '1'),
+('2024-03-02', '1', '2', '2'),
+('2024-03-03', '3', '3', '3'),
+('2024-03-04', '2', '4', '4'),
+('2024-03-05', '1', '5', '5');
+
